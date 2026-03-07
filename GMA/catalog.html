@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GMA – קטלוג מוצרים</title>
+<style>
+  :root {
+    --navy:  #1a3c6e;
+    --gold:  #c9a227;
+    --gold-light: #f0d87a;
+    --bg:    #f4f6f9;
+    --card:  #ffffff;
+    --text:  #1e1e2e;
+    --muted: #6b7280;
+    --essential: #16a34a;
+    --premium:   #2563eb;
+    --elite:     #7c3aed;
+    --radius: 12px;
+    --shadow: 0 2px 12px rgba(0,0,0,.10);
+    --shadow-hover: 0 8px 28px rgba(0,0,0,.16);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Header ── */
+  header {
+    background: #fff;
+    color: var(--navy);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 3px 12px rgba(0,0,0,.10);
+    border-bottom: 3px solid var(--gold);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    min-height: 72px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .logo-img {
+    height: 52px;
+    width: auto;
+    max-width: 160px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .logo-emblem {
+    width: 52px; height: 52px;
+    background: var(--gold);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 900;
+    color: var(--navy);
+    letter-spacing: 1px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,.3);
+  }
+
+  .logo-text h1 { font-size: 1.4rem; font-weight: 700; line-height: 1.1; color: var(--navy); }
+  .logo-text p  { font-size: 0.72rem; opacity: .6; letter-spacing: .5px; margin-top: 2px; color: var(--muted); }
+
+  .header-badge {
+    background: var(--navy);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: .8rem;
+    color: var(--gold-light);
+    white-space: nowrap;
+  }
+
+  /* ── Tabs ── */
+  .tabs-wrap {
+    background: #fff;
+    border-bottom: 2px solid #e5e7eb;
+    position: sticky;
+    top: 72px;
+    z-index: 90;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  }
+
+  .tabs {
+    display: flex;
+    overflow-x: auto;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    gap: 0;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 14px 24px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: .95rem;
+    font-family: inherit;
+    color: var(--muted);
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: color .2s, border-color .2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  .tab-btn .tab-count {
+    background: #e5e7eb;
+    color: var(--muted);
+    border-radius: 10px;
+    padding: 1px 8px;
+    font-size: .75rem;
+    font-weight: 600;
+    transition: background .2s, color .2s;
+  }
+
+  .tab-btn:hover { color: var(--navy); }
+
+  .tab-btn.active {
+    color: var(--navy);
+    border-bottom-color: var(--gold);
+    font-weight: 700;
+  }
+
+  .tab-btn.active .tab-count {
+    background: var(--gold);
+    color: var(--navy);
+  }
+
+  /* ── Main ── */
+  main {
+    flex: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    width: 100%;
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .panel-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+  .panel-header h2 { font-size: 1.4rem; color: var(--navy); }
+  .panel-header .count-label {
+    font-size: .85rem;
+    color: var(--muted);
+  }
+
+  /* ── Product Grid ── */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  /* ── Image Gallery ── */
+  .card-gallery {
+    position: relative;
+    background: #f0f2f5;
+    overflow: hidden;
+  }
+
+  .main-img-wrap {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    cursor: zoom-in;
+  }
+
+  .main-img-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .35s;
+  }
+  .card:hover .main-img-wrap img { transform: scale(1.04); }
+
+  .thumbs {
+    display: flex;
+    gap: 6px;
+    padding: 8px 10px;
+    overflow-x: auto;
+    background: #fafafa;
+    border-top: 1px solid #eee;
+    scrollbar-width: thin;
+  }
+  .thumbs:empty { display: none; }
+
+  .thumb {
+    width: 48px; height: 48px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color .15s;
+  }
+  .thumb.active, .thumb:hover { border-color: var(--gold); }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* ── Card Body ── */
+  .card-body {
+    padding: 14px 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .code-badge {
+    font-size: .7rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: .5px;
+  }
+
+  .tier-badge {
+    font-size: .68rem;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  .tier-Essential { background: #dcfce7; color: var(--essential); }
+  .tier-Premium   { background: #dbeafe; color: var(--premium);   }
+  .tier-Elite     { background: #ede9fe; color: var(--elite);     }
+
+  .card-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .card-desc {
+    font-size: .83rem;
+    color: var(--muted);
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .price {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--navy);
+  }
+  .price span { font-size: .8rem; font-weight: 500; color: var(--muted); }
+
+  .buy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--gold);
+    color: var(--navy);
+    font-family: inherit;
+    font-size: .85rem;
+    font-weight: 700;
+    padding: 9px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background .15s, transform .15s;
+    white-space: nowrap;
+  }
+  .buy-btn:hover { background: #b8911f; transform: scale(1.03); }
+
+  /* ── Empty State ── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+  }
+  .empty-state .empty-icon { font-size: 3.5rem; margin-bottom: 16px; }
+  .empty-state h3 { font-size: 1.2rem; margin-bottom: 8px; color: var(--text); }
+  .empty-state p { font-size: .9rem; }
+
+  /* ── Lightbox ── */
+  #lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.88);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    cursor: zoom-out;
+  }
+  #lightbox.open { display: flex; }
+
+  #lightbox img {
+    max-width: min(90vw, 780px);
+    max-height: 88vh;
+    border-radius: 8px;
+    object-fit: contain;
+    box-shadow: 0 8px 48px rgba(0,0,0,.6);
+    cursor: default;
+  }
+
+  #lb-close {
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.3);
+    color: #fff;
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .15s;
+  }
+  #lb-close:hover { background: rgba(255,255,255,.3); }
+
+  /* ── Footer ── */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,.8);
+    margin-top: auto;
+    padding: 28px 2rem;
+  }
+
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-logo { display: flex; align-items: center; gap: 12px; }
+  .footer-logo .logo-emblem { width: 40px; height: 40px; font-size: 17px; }
+  .footer-logo-text h3 { font-size: 1rem; color: #fff; }
+  .footer-logo-text p  { font-size: .72rem; opacity: .65; margin-top: 2px; }
+
+  .footer-info { text-align: center; font-size: .8rem; }
+  .footer-info strong { color: var(--gold-light); }
+
+  .footer-copy { font-size: .75rem; opacity: .55; text-align: left; }
+
+  /* ── Contact Modal ── */
+  #contact-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.60);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  #contact-modal.open { display: flex; }
+
+  .modal-box {
+    background: #fff;
+    border-radius: 16px;
+    padding: 36px 32px 32px;
+    width: 100%;
+    max-width: 480px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    animation: modalIn .22s ease;
+  }
+  @keyframes modalIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--muted);
+    line-height: 1;
+    padding: 4px;
+    border-radius: 50%;
+    transition: background .15s;
+  }
+  .modal-close:hover { background: #f0f0f0; }
+
+  .modal-header {
+    margin-bottom: 6px;
+  }
+  .modal-header h2 {
+    font-size: 1.25rem;
+    color: var(--navy);
+    font-weight: 800;
+  }
+  .modal-product-label {
+    font-size: .82rem;
+    color: var(--muted);
+    margin-bottom: 22px;
+    display: block;
+  }
+  .modal-product-label strong { color: var(--navy); }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 14px;
+  }
+  .form-group label {
+    font-size: .82rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .form-group input {
+    padding: 10px 12px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 8px;
+    font-size: .92rem;
+    font-family: inherit;
+    transition: border-color .15s;
+    direction: rtl;
+  }
+  .form-group input:focus {
+    outline: none;
+    border-color: var(--navy);
+  }
+  .form-group input::placeholder { color: #b0b4bc; }
+
+  .submit-btn {
+    width: 100%;
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 13px;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: background .15s, transform .15s;
+    letter-spacing: .3px;
+  }
+  .submit-btn:hover { background: #142e58; transform: scale(1.01); }
+
+  .form-success {
+    display: none;
+    text-align: center;
+    padding: 30px 10px;
+  }
+  .form-success .success-icon { font-size: 3rem; margin-bottom: 14px; }
+  .form-success h3 { color: var(--navy); font-size: 1.1rem; margin-bottom: 8px; }
+  .form-success p  { color: var(--muted); font-size: .88rem; }
+
+  /* ── Responsive ── */
+  @media (max-width: 700px) {
+    .header-badge { display: none; }
+    .product-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+    main { padding: 1.2rem 1rem; }
+    .footer-copy { display: none; }
+    .footer-inner { justify-content: center; }
+  }
+
+  @media (max-width: 420px) {
+    .product-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <a class="logo" href="#">
+    <img src="GMA LOGO.jpeg" alt="GMA Logo" class="logo-img">
+    <div class="logo-text">
+      <h1>GMA Store</h1>
+      <p>GLOBAL MARKET ACCESS · קטלוג מוצרים</p>
+    </div>
+  </a>
+  <div class="header-badge">✦ מוצרים עם תמונה בלבד</div>
+</header>
+
+<!-- ═══ TABS ═══ -->
+<div class="tabs-wrap">
+  <div class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="tech" role="tab" aria-selected="true">
+      📱 טכנולוגיה שימושית <span class="tab-count">8</span>
+    </button>
+    <button class="tab-btn" data-tab="home" role="tab" aria-selected="false">
+      🏠 בית ואווירה <span class="tab-count">2</span>
+    </button>
+    <button class="tab-btn" data-tab="kitchen" role="tab" aria-selected="false">
+      🍽️ מטבח ואירוח <span class="tab-count">2</span>
+    </button>
+    <button class="tab-btn" data-tab="fashion" role="tab" aria-selected="false">
+      👗 אופנה ואביזרים <span class="tab-count">0</span>
+    </button>
+  </div>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<main>
+
+  <!-- ── Tab: Technology ── -->
+  <div class="tab-panel active" id="tab-tech">
+    <div class="panel-header">
+      <h2>טכנולוגיה שימושית</h2>
+      <span class="count-label">8 מוצרים זמינים</span>
+    </div>
+    <div class="product-grid">
+
+      <!-- GMA5001 -->
+      <div class="card">
+        <div class="card-gallery">
+          <div class="main-img-wrap" onclick="openLightbox('PIC/GMA5001.avif')">
+            <img id="main-GMA5001" src="PIC/GMA5001.avif" alt="כבל טעינה מגנטי 3-ב-1" loading="lazy">
+          </div>
+          <div class="thumbs">
+            <div class="thumb active" onclick="switchImg('GMA5001','PIC/GMA5001.avif',this)"><img src="PIC/GMA5001.avif" alt=""></div>
+            <div class="thumb" onclick="switchImg('GMA5001','PIC/GMA5001b.jpg',this)"><img src="PIC/GMA5001b.jpg" alt=""></div>
+            <div class="thumb" onclick="switchImg('GMA5001','PIC/GMA5001c.jpg',this)"><img src="PIC/GMA5001c.jpg" alt=""></div>
+            <div class="thumb" onclick="switchImg('GMA5001','PIC/GMA5001D.jpg',this)"><img src="PIC/GMA5001D.jpg" alt=""></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="code-badge">GMA5001</span>
+            <span class="tier-badge tier-Essential">Essential</span>
+          </div>
+          <div class="card-name">כבל טעינה מגנטי 3-ב-1</div>
+          <div class="card-desc">USB-C, Lightning, Micro-USB עם חיבור מגנטי. מתאים לכל הסמארטפונים.</div>
+          <div class="card-footer">
+            <div class="price">₪59 <span>/ יחידה</span></div>
+            <a class="buy-btn" href="https://he.aliexpress.com/item/1005008646445839.html" target="_blank" rel="noopener">📋 קבלת הצעת מחיר</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- GMA5002 -->
+      <div class="card">
+        <div class="card-gallery">
+          <div class="main-img-wrap" onclick="openLightbox('PIC/GMA5002.avif')">
+            <img id="main-GMA5002" src="PIC/GMA5002.avif" alt="מעמד טלפון מגנטי לרכב" loading="lazy">
+          </div>
+          <div class="thumbs">
+            <div class="thumb active" onclick="switchImg('GMA5002','PIC/GMA5002.avif',this)"><img src="PIC/GMA5002.avif" alt=""></div>
+            <div class="thumb" onclick="switchImg('GMA5002','PIC/GMA5002.jpg',this)"><img src="PIC/GMA5002.jpg" alt=""></div>
+            <div class="thumb" onclick="switchImg('GMA5002','PIC/GMA5002B.jpg',this)"><img src="PIC/GMA5002B.jpg" alt=""></div>
+            <div class="thumb" onclick="switchImg('GMA5002','PIC/GMA5002C.jpg',this)"><img src="PIC/GMA5002C.jpg" alt=""></div>
+            <div class="thumb" onclick="switchImg('GMA5002','PIC/GMA5002D.jpg',this)"><img src="PIC/GMA5002D.jpg" alt=""></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="code-badge">GMA5002</span>
+            <span class="tier-badge tier-Essential">Essential</span>
+          </div>
+          <div class="card-name">מעמד טלפון מגנטי לרכב</div>
+          <div class="card-desc">התקנה פשוטה, אחיזה חזקה. סיבוב 360°, מתאים לכל רכב.</div>
+          <div class="card-footer">
+            <div class="price">₪55 <span>/ יחידה</span></div>
+            <a class="buy-btn" href="https://www.alibaba.com/product-detail/360-Degree-Rotation-Stable-Glass-Vacuum_1601251704417.html" target="_blank" rel="noopener">📋 קבלת הצעת מחיר</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- GMA5003 -->
+      <div class="card">
+        <div class="card-gallery">
+          <div class="main-img-wrap" onclick="openLightbox('PIC/GMA5003.avif')">
+            <img id="main-GMA5003" src="PIC/GMA5003.avif" alt="אוזניות אלחוטיות TWS" loading="lazy">
+          </div>
+          <div class="thumbs">
+            <div class="thumb active" onclick="switchImg('GMA5003','PIC/GMA5003.avif',this)"><img src="PIC/GMA5003.avif" alt=""></div>
+            <div class="thumb" onclick="switchImg('GMA5003','PIC/GMA5003B.avif',this)"><img src="PIC/GMA5003B.avif" alt=""></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="code-badge">GMA5003</span>
+            <span class="tier-badge tier-Essential">Essential</span>
+          </div>
+          <div class="card-name">אוזניות אלחוטיות TWS</div>
+          <div class="card-desc">Bluetooth, מיקרופון מובנה, הפחתת רעשים. בס עמוק לחוויית מוזיקה מלאה.</div>
+          <div class="card-footer">
+            <div class="price">₪69 <span>/ יחידה</span></div>
+            <a class="buy-btn" href="https://www.alibaba.com/product-detail/Best-Selling-TWS-Headphones-Deep-Bass_1600706203434.html" target="_blank" rel="noopener">📋 קבלת הצעת מחיר</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- GMA5004 -->
+      <div class="card">
+        <div class="card-gallery">
+          <div class="main-img-wrap" onclick="openLightbox('PIC/GMA5004.avif')">
+            <img id="main-GMA5004" src="PIC/GMA5004.avif" alt="פנס LED קטן נטען" loading="lazy">
+          </div>
+          <div class="thumbs">
+            <div class="thumb active" onclick="switchImg('GMA5004','PIC/GMA5004.avif',this)"><img src="PIC/GMA5004.avif" alt=""></div>
+            <div class="thumb" onclick="switchImg('GMA5004','PIC/GMA5004B.avif',this)"><img src="PIC/GMA5004B.avif" alt=""></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="code-badge">GMA5004</span>
+            <span class="tier-badge tier-Essential">Essential</span>
+          </div>
+          <div class="card-name">פנס LED קטן נטען</div>
+          <div class="card-desc">עם מגנט וקליפס לנשיאה. טעינה USB, אורך חיים גבוה.</div>
+          <div class="card-footer">
+            <div class="price">₪50 <span>/ יחידה</span></div>
+            <a class="buy-btn" href="https://he.aliexpress.com/item/1005006780851292.html" target="_blank" rel="noopener">📋 קבלת הצעת מחיר</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- GMA5005 -->
+      <div class="card">
+        <div class="card-gallery">
+          <div class="main-img-wrap" onclick="openLightbox('PIC/GMA5005.avif')">
+            <img id="main-GMA5005" src="PIC/GMA5005.avif" alt="טבעת אחיזה מגנטית לטלפון" loading="lazy">
+          </div>
+          <div class="thumbs">
+            <div class="thumb active" onclick="switchImg('GMA5005','PIC/GMA5005.avif',this)"><img src="PIC/GMA5005.avif" alt=""></div>
+            <div class="thumb" onclick="switchImg('GMA5005','PIC/GMA5005B.avif',this)"><img src="PIC/GMA5005B.avif" alt=""></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="code-badge">GMA5005</span>
+            <span class="tier-badge tier-Essential">Essential</span>
+          </div>
+          <div class="card-name">טבעת אחיזה מגנטית לטלפון</div>
+          <div class="card-desc">PopSocket מגנטי, מונע נפילות. סט 3 חלקים, תואם MagSafe.</div>
+          <div class="card-footer">
+            <div class="price">₪49 <span>/ יחידה</span></div>
+            <a class="buy-btn" href="https://he.aliexpress.com/item/1005010648645272.html" target="_blank" rel="noopener">📋 קבלת הצעת מחיר</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- GMA5006 -->
+      <div class="card">
+        <div class="card-gallery">
+          <div class="main-img-wrap" onclick="openLightbox('PIC/GMA5006.avif')">
+            <img id="main-GMA5006" src="PIC/GMA5006.avif" alt="צמיד חכם" loading="lazy">
+          </div>
+          <div class="thumbs">
+            <div class="thumb active" onclick="switchImg('GMA5006','PIC/GMA5006.avif',this)"><img src="PIC/GMA5006.avif" alt=""></div>
+            <div class="thumb" onclick="switchImg('GMA5006','PIC/GMA5006B.avif',this)"><img src="PIC/GMA5006B.avif" alt=""></div>
+            <div class="thumb" onclick="switchImg('GMA5006','PIC/GMA5006C.avif',this)"><img src="PIC/GMA5006C.avif" alt=""></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="code-badge">GMA5006</span>
+            <span class="tier-badge tier-Premium">Premium</span>
+          </div>
+          <div class="card-name">צמיד חכם לגברים ונשים</div>
+          <div class="card-desc">מעקב כושר, ניטור לחץ דם ודופק. עיצוב אלגנטי לכל אירוע.</div>
+          <div class="card-footer">
+            <div class="price">₪85 <span>/ יחידה</span></div>
+            <a class="buy-btn" href="https://he.aliexpress.com/item/1005010537025143.html" target="_blank" rel="noopener">📋 קבלת הצעת מחיר</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- GMA5007 -->
+      <div class="card">
+        <div class="card-gallery">
+          <div class="main-img-wrap" onclick="openLightbox('PIC/GMA5007.avif')">
+            <img id="main-GMA5007" src="PIC/GMA5007.avif" alt="אוזניות בלוטוס Lenovo HD200" loading="lazy">
+          </div>
+          <div class="thumbs">
+            <div class="thumb active" onclick="switchImg('GMA5007','PIC/GMA5007.avif',this)"><img src="PIC/GMA5007.avif" alt=""></div>
+            <div class="thumb" onclick="switchImg('GMA5007','PIC/GMA5007B.avif',this)"><img src="PIC/GMA5007B.avif" alt=""></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="code-badge">GMA5007</span>
+            <span class="tier-badge tier-Premium">Premium</span>
+          </div>
+          <div class="card-name">אוזניות Lenovo HD200</div>
+          <div class="card-desc">Over-ear Bluetooth, מיועד לעבודה היברידית. נוחות מרבית לשימוש ממושך.</div>
+          <div class="card-footer">
+            <div class="price">₪89 <span>/ יחידה</span></div>
+            <a class="buy-btn" href="https://he.aliexpress.com/item/1005005740729083.html" target="_blank" rel="noopener">📋 קבלת הצעת מחיר</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- GMA5008 -->
+      <div class="card">
+        <div class="card-gallery">
+          <div class="main-img-wrap" onclick="openLightbox('PIC/GMA5008.avif')">
+            <img id="main-GMA5008" src="PIC/GMA5008.avif" alt="תחנת טעינה אלחוטית 3 ב-1" loading="lazy">
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="code-badge">GMA5008</span>
+            <span class="tier-badge tier-Premium">Premium</span>
+          </div>
+          <div class="card-name">תחנת טעינה אלחוטית LED 3 ב-1</div>
+          <div class="card-desc">לאייפון, Apple Watch ו-AirPods. טעינה מהירה, עמדה מתקפלת.</div>
+          <div class="card-footer">
+            <div class="price">₪79 <span>/ יחידה</span></div>
+            <a class="buy-btn" href="https://he.aliexpress.com/item/1005010463514472.html" target="_blank" rel="noopener">📋 קבלת הצעת מחיר</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /product-grid -->
+  </div><!-- /tab-tech -->
+
+  <!-- ── Tab: Home ── -->
+  <div class="tab-panel" id="tab-home">
+    <div class="panel-header">
+      <h2>בית ואווירה</h2>
+      <span class="count-label">2 מוצרים זמינים</span>
+    </div>
+    <div class="product-grid">
+
+      <!-- GMA5017 -->
+      <div class="card">
+        <div class="card-gallery">
+          <div class="main-img-wrap" onclick="openLightbox('PIC/GMA5017.avif')">
+            <img id="main-GMA5017" src="PIC/GMA5017.avif" alt="מפזר ריח אולטרסוני" loading="lazy">
+          </div>
+          <div class="thumbs">
+            <div class="thumb active" onclick="switchImg('GMA5017','PIC/GMA5017.avif',this)"><img src="PIC/GMA5017.avif" alt=""></div>
+            <div class="thumb" onclick="switchImg('GMA5017','PIC/GMA5017B.avif',this)"><img src="PIC/GMA5017B.avif" alt=""></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="code-badge">GMA5017</span>
+            <span class="tier-badge tier-Essential">Essential</span>
+          </div>
+          <div class="card-name">מפזר ריח אולטרסוני + LED</div>
+          <div class="card-desc">עיצוב מינימליסטי, תאורת mood. יוצר אווירה מרגיעה בכל חדר.</div>
+          <div class="card-footer">
+            <div class="price">₪68 <span>/ יחידה</span></div>
+            <a class="buy-btn" href="https://www.aliexpress.com/w/wholesale-מפזר-ריח-אולטרסוני.html" target="_blank" rel="noopener">📋 קבלת הצעת מחיר</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- GMA5025 -->
+      <div class="card">
+        <div class="card-gallery">
+          <div class="main-img-wrap" onclick="openLightbox('PIC/GMA5025.avif')">
+            <img id="main-GMA5025" src="PIC/GMA5025.avif" alt="מנורת שולחן LED נטענת" loading="lazy">
+          </div>
+          <div class="thumbs">
+            <div class="thumb active" onclick="switchImg('GMA5025','PIC/GMA5025.avif',this)"><img src="PIC/GMA5025.avif" alt=""></div>
+            <div class="thumb" onclick="switchImg('GMA5025','PIC/GMA5025B.avif',this)"><img src="PIC/GMA5025B.avif" alt=""></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="code-badge">GMA5025</span>
+            <span class="tier-badge tier-Elite">Elite</span>
+          </div>
+          <div class="card-name">מנורת שולחן LED נטענת</div>
+          <div class="card-desc">3 רמות בהירות, אלחוטית לחלוטין. מושלמת למשרד ולחדר שינה.</div>
+          <div class="card-footer">
+            <div class="price">₪95 <span>/ יחידה</span></div>
+            <a class="buy-btn" href="https://he.aliexpress.com/item/1005010793998800.html" target="_blank" rel="noopener">📋 קבלת הצעת מחיר</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /tab-home -->
+
+  <!-- ── Tab: Kitchen ── -->
+  <div class="tab-panel" id="tab-kitchen">
+    <div class="panel-header">
+      <h2>מטבח ואירוח</h2>
+      <span class="count-label">2 מוצרים זמינים</span>
+    </div>
+    <div class="product-grid">
+
+      <!-- GMA5030 -->
+      <div class="card">
+        <div class="card-gallery">
+          <div class="main-img-wrap" onclick="openLightbox('PIC/GMA5030.avif')">
+            <img id="main-GMA5030" src="PIC/GMA5030.avif" alt="מטחנת מלח ופלפל חשמלית" loading="lazy">
+          </div>
+          <div class="thumbs">
+            <div class="thumb active" onclick="switchImg('GMA5030','PIC/GMA5030.avif',this)"><img src="PIC/GMA5030.avif" alt=""></div>
+            <div class="thumb" onclick="switchImg('GMA5030','PIC/GMA5030B.avif',this)"><img src="PIC/GMA5030B.avif" alt=""></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="code-badge">GMA5030</span>
+            <span class="tier-badge tier-Essential">Essential</span>
+          </div>
+          <div class="card-name">מטחנת מלח ופלפל חשמלית</div>
+          <div class="card-desc">סט זוגי, טעינת USB. טחינה אחידה בלחיצת כפתור.</div>
+          <div class="card-footer">
+            <div class="price">₪69 <span>/ יחידה</span></div>
+            <a class="buy-btn" href="https://www.aliexpress.com/w/wholesale-מטחנת-מלח-ופלפל-חשמלית.html" target="_blank" rel="noopener">📋 קבלת הצעת מחיר</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- GMA5036 -->
+      <div class="card">
+        <div class="card-gallery">
+          <div class="main-img-wrap" onclick="openLightbox('PIC/GMA5036.avif')">
+            <img id="main-GMA5036" src="PIC/GMA5036.avif" alt="כוס תרמית חכמה" loading="lazy">
+          </div>
+          <div class="thumbs">
+            <div class="thumb active" onclick="switchImg('GMA5036','PIC/GMA5036.avif',this)"><img src="PIC/GMA5036.avif" alt=""></div>
+            <div class="thumb" onclick="switchImg('GMA5036','PIC/GMA5036B.avif',this)"><img src="PIC/GMA5036B.avif" alt=""></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="code-badge">GMA5036</span>
+            <span class="tier-badge tier-Elite">Elite</span>
+          </div>
+          <div class="card-name">כוס תרמית חכמה + בקרת טמפרטורה</div>
+          <div class="card-desc">חימום וקירור חכם, שמירה על הטמפרטורה הנבחרת שעות ארוכות.</div>
+          <div class="card-footer">
+            <div class="price">₪99 <span>/ יחידה</span></div>
+            <a class="buy-btn" href="https://he.aliexpress.com/item/1005009980302473.html" target="_blank" rel="noopener">📋 קבלת הצעת מחיר</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /tab-kitchen -->
+
+  <!-- ── Tab: Fashion ── -->
+  <div class="tab-panel" id="tab-fashion">
+    <div class="empty-state">
+      <div class="empty-icon">📸</div>
+      <h3>אין מוצרים עם תמונות עדיין</h3>
+      <p>קטגוריית אופנה ואביזרים תעודכן בקרוב עם תמונות מוצרים.</p>
+    </div>
+  </div>
+
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="GMA LOGO.jpeg" alt="GMA Logo" class="logo-img" style="height:40px; background:#fff; border-radius:6px; padding:3px;">
+      <div class="footer-logo-text">
+        <h3>GMA Store</h3>
+        <p>Global Market Access</p>
+      </div>
+    </div>
+    <div class="footer-info">
+      <strong>קטלוג מוצרים רשמי</strong><br>
+      מציג מוצרים עם תמונות בלבד · מתעדכן בהתמדה
+    </div>
+    <div class="footer-copy">© 2025 GMA Store · כל הזכויות שמורות</div>
+  </div>
+</footer>
+
+<!-- ═══ CONTACT MODAL ═══ -->
+<div id="contact-modal" onclick="handleModalBg(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeContactForm()" aria-label="סגור">✕</button>
+    <div class="modal-header">
+      <h2>בקשת הצעת מחיר</h2>
+      <span class="modal-product-label">מוצר: <strong id="modal-product-name"></strong></span>
+    </div>
+    <form id="contact-form" onsubmit="handleFormSubmit(event)" novalidate>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="f-firstname">שם פרטי</label>
+          <input id="f-firstname" type="text" placeholder="ישראל" required>
+        </div>
+        <div class="form-group">
+          <label for="f-lastname">שם משפחה</label>
+          <input id="f-lastname" type="text" placeholder="ישראלי" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="f-phone">מס׳ נייד</label>
+        <input id="f-phone" type="tel" placeholder="050-0000000" required>
+      </div>
+      <div class="form-group">
+        <label for="f-email">כתובת אי-מייל</label>
+        <input id="f-email" type="email" placeholder="name@example.com" required>
+      </div>
+      <button class="submit-btn" type="submit">📩 קבלת הצעת מחיר</button>
+    </form>
+    <div class="form-success" id="form-success">
+      <div class="success-icon">✅</div>
+      <h3>הבקשה נשלחה בהצלחה!</h3>
+      <p>נציג יצור איתך קשר בהקדם עם הצעת מחיר מותאמת.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ LIGHTBOX ═══ -->
+<div id="lightbox" onclick="closeLightbox()">
+  <button id="lb-close" onclick="closeLightbox()" aria-label="סגור">✕</button>
+  <img id="lb-img" src="" alt="תצוגה מורחבת" onclick="event.stopPropagation()">
+</div>
+
+<script>
+  // ── Tab switching ──
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ── Thumbnail switching ──
+  function switchImg(code, src, thumbEl) {
+    const mainImg = document.getElementById('main-' + code);
+    if (!mainImg) return;
+    mainImg.src = src;
+    mainImg.closest('.main-img-wrap').setAttribute('onclick', `openLightbox('${src}')`);
+    thumbEl.closest('.thumbs').querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+    thumbEl.classList.add('active');
+  }
+
+  // ── Lightbox ──
+  function openLightbox(src) {
+    document.getElementById('lb-img').src = src;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.getElementById('lb-img').src = '';
+    document.body.style.overflow = '';
+  }
+
+  // ── Contact Modal ──
+  // Intercept all buy-btn clicks — show contact form instead of following link
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.buy-btn');
+    if (!btn) return;
+    e.preventDefault();
+    const productName = btn.closest('.card')?.querySelector('.card-name')?.textContent?.trim() || '';
+    openContactForm(productName);
+  });
+
+  function openContactForm(productName) {
+    document.getElementById('modal-product-name').textContent = productName;
+    document.getElementById('contact-form').style.display = '';
+    document.getElementById('form-success').style.display = 'none';
+    document.getElementById('contact-form').reset();
+    document.getElementById('contact-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => document.getElementById('f-firstname').focus(), 100);
+  }
+
+  function closeContactForm() {
+    document.getElementById('contact-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function handleModalBg(e) {
+    if (e.target === document.getElementById('contact-modal')) closeContactForm();
+  }
+
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    document.getElementById('contact-form').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+    setTimeout(closeContactForm, 3000);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeLightbox(); closeContactForm(); }
+  });
+</script>
+</body>
+</html>
