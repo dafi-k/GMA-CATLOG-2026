@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>קטלוג מוצרים GMA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @media (min-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 10px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15), 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #e5e7eb 0%, #f3f4f6 100%);
+        }
+
+        .product-content {
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-code {
+            font-size: 0.85em;
+            color: #0ea5e9;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .product-name {
+            font-size: 1.3em;
+            color: #1f2937;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            min-height: 2.8em;
+        }
+
+        .product-description {
+            font-size: 0.95em;
+            color: #6b7280;
+            margin-bottom: 16px;
+            line-height: 1.6;
+            min-height: 2.4em;
+            flex-grow: 1;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e5e7eb;
+            gap: 12px;
+        }
+
+        .product-price {
+            font-size: 1.8em;
+            color: #1e3a8a;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .product-price .currency {
+            font-size: 0.8em;
+            margin-left: 4px;
+        }
+
+        .btn-request {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Heebo', sans-serif;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .btn-request:hover {
+            background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
+            transform: translateX(-2px);
+            box-shadow: 0 8px 16px rgba(30, 58, 138, 0.3);
+        }
+
+        .btn-request:active {
+            transform: translateX(0);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .product-card {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .product-card:nth-child(1) { animation-delay: 0.05s; }
+        .product-card:nth-child(2) { animation-delay: 0.1s; }
+        .product-card:nth-child(3) { animation-delay: 0.15s; }
+        .product-card:nth-child(4) { animation-delay: 0.2s; }
+        .product-card:nth-child(5) { animation-delay: 0.25s; }
+        .product-card:nth-child(n+6) { animation-delay: 0.3s; }
+
+        .product-category {
+            display: inline-block;
+            font-size: 0.75em;
+            background: #e0e7ff;
+            color: #1e40af;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .empty-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #e5e7eb 0%, #f3f4f6 100%);
+            color: #9ca3af;
+            font-size: 14px;
+            font-family: 'Heebo', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎁 קטלוג מוצרים GMA</h1>
+            <p>מוצרים חדשים וחדשניים לבחירה</p>
+        </div>
+
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        const products = [
+            {code: "GMA5001", name: "כבל טעינה מגנטי 3-ב-1", description: "USB-C, Lightning, Micro-USB עם חיבור מגנטי", price: "59", category: "טכנולוגיה שימושית"},
+            {code: "GMA5002", name: "מעמד טלפון מגנטי לרכב", description: "התקנה פשוטה, אחיזה חזקה", price: "55", category: "טכנולוגיה שימושית"},
+            {code: "GMA5003", name: "אוזניות אלחוטיות TWS", description: "אוזניות Bluetooth, למשחקים עם הפחתת רעש במיקרופון", price: "69", category: "טכנולוגיה שימושית"},
+            {code: "GMA5004", name: "פנס LED קטן נטען", description: "עם מגנט וקליפס, נטען USB", price: "50", category: "טכנולוגיה שימושית"},
+            {code: "GMA5005", name: "טבעת אחיזה מגנטית לטלפון", description: "PopSocket מגנטי, מונע נפילות", price: "49", category: "טכנולוגיה שימושית"},
+            {code: "GMA5006", name: "צמיד חכם לגברים ונשים", description: "מעקב כושר, שעון חכם ללחץ דם ולדופק", price: "85", category: "טכנולוגיה שימושית"},
+            {code: "GMA5007", name: "אוזניות בלוטוס Lenovo HD200", description: "Over-ear, עבודה היברידית", price: "89", category: "טכנולוגיה שימושית"},
+            {code: "GMA5008", name: "תחנת טעינה אלחוטית מהירה 3 ב-1", description: "iPhone, Apple Watch, Airpods Pro", price: "79", category: "טכנולוגיה שימושית"},
+            {code: "GMA5010", name: "רמקול Bluetooth עמיד למים", description: "למקלחת, חוף, פיקניק", price: "85", category: "טכנולוגיה שימושית"},
+            {code: "GMA5011", name: "שעון חכם עם מסך AMOLED", description: "מסך AMOLED, נראה פרימיום", price: "98", category: "טכנולוגיה שימושית"},
+            {code: "GMA5012", name: "אוזניות ANC Bluetooth", description: "ביטול רעשים אקטיבי", price: "95", category: "טכנולוגיה שימושית"},
+            {code: "GMA5013", name: "מטען אלחוטי 3-ב-1", description: "טלפון + אוזניות + שעון", price: "99", category: "טכנולוגיה שימושית"},
+            {code: "GMA5014", name: "מיני פרוייקטור LED", description: "הקרנת טלפון, קולנוע ביתי", price: "99", category: "טכנולוגיה שימושית"},
+            {code: "GMA5015", name: "Power Bank 20,000mAh", description: "טעינה מהירה, נסיעות", price: "95", category: "טכנולוגיה שימושית"},
+            {code: "GMA5016", name: "רצועות LED חכמות 5 מטר", description: "RGB, שלט/אפליקציה", price: "65", category: "בית ואווירה"},
+            {code: "GMA5017", name: "מפזר ריח אולטרסוני + LED", description: "עיצוב מינימליסטי, mood lighting", price: "68", category: "בית ואווירה"},
+            {code: "GMA5018", name: "מארגן כבלים מגנטי", description: "מחזיקים מגנטיים, סדר", price: "55", category: "בית ואווירה"},
+            {code: "GMA5019", name: "שעון מעורר LED דיגיטלי", description: "תצוגת טמפרטורה, מעורר", price: "59", category: "בית ואווירה"},
+            {code: "GMA5020", name: "שעון מעורר עם סימולציית זריחה", description: "Wake-up light, בריאות שינה", price: "89", category: "בית ואווירה"},
+            {code: "GMA5021", name: "מנורת לילה חכמה + חיישן תנועה", description: "למסדרון/שירותים, USB", price: "75", category: "בית ואווירה"},
+            {code: "GMA5022", name: "מארגן תכשיטים מסתובב", description: "לתכשיטים, אסתטי", price: "79", category: "בית ואווירה"},
+            {code: "GMA5023", name: "כרית זיכרון ארגונומית", description: "Memory Foam, למשרד/אוטו", price: "85", category: "בית ואווירה"},
+            {code: "GMA5024", name: "רובוט שואב אבק מיני", description: "שואב אוטומטי, wow factor", price: "99", category: "בית ואווירה"},
+            {code: "GMA5025", name: "מנורת שולחן LED נטענת", description: "3 רמות בהירות, אלחוטי", price: "95", category: "בית ואווירה"},
+            {code: "GMA5026", name: "מפזר ריח + מכשיר לחות 2-ב-1", description: "רב-תכליתי, בריאות", price: "98", category: "בית ואווירה"},
+            {code: "GMA5027", name: "שעון קיר דיגיטלי 3D", description: "מודרני, גדול, אינסטגרמבילי", price: "95", category: "בית ואווירה"},
+            {code: "GMA5028", name: "בקבוק מים תרמי מזכוכית", description: "צבעי פסטל, פיית קש", price: "65", category: "מטבח ואירוח"},
+            {code: "GMA5029", name: "סט 4 קופסאות אחסון אטומות", description: "זכוכית/פלסטיק איכותי, אטומות", price: "59", category: "מטבח ואירוח"},
+            {code: "GMA5030", name: "מטחנת מלח ופלפל חשמלית", description: "סט זוגי, טעינת USB", price: "69", category: "מטבח ואירוח"},
+            {code: "GMA5031", name: "משקף קפה French Press", description: "זכוכית איכותי, קפה ביתי", price: "65", category: "מטבח ואירוח"},
+            {code: "GMA5032", name: "בקבוק מים חכם + תזכורת LED", description: "תזכורת שתייה, LED, בריאות", price: "85", category: "מטבח ואירוח"},
+            {code: "GMA5033", name: "מכונת קפה ניידת חשמלית", description: "אספרסו נטען, נסיעות", price: "89", category: "מטבח ואירוח"},
+            {code: "GMA5034", name: "מיקסר אישי נטען", description: "Smoothie portable, בריאות", price: "79", category: "מטבח ואירוח"},
+            {code: "GMA5035", name: "מאזניים דיגיטליות מיני לכף", description: "למטבח מדויק, אפייה", price: "72", category: "מטבח ואירוח"},
+            {code: "GMA5036", name: "כוס תרמית חכמת + בקרת טמפרטורה", description: "חימום/קירור, טכנולוגיה", price: "99", category: "מטבח ואירוח"},
+            {code: "GMA5037", name: "סט כלי בישול 9 חלקים סיליקון", description: "צבעוני, איכותי, סט שלם", price: "95", category: "מטבח ואירוח"},
+            {code: "GMA5038", name: "מכונת ואקום למזון ניידת", description: "שמירת טריות, חיסכון", price: "98", category: "מטבח ואירוח"},
+            {code: "GMA5039", name: "תיק ארגונית קומפקטי", description: "לתיק גדול, סדר", price: "55", category: "אופנה ואביזרים"},
+            {code: "GMA5040", name: "ארנק RFID Blocking", description: "הגנה מפני סריקה, אבטחה", price: "62", category: "אופנה ואביזרים"},
+            {code: "GMA5041", name: "שרוכים אלסטיים No-Tie", description: "נוחות, ללא קשירה", price: "49", category: "אופנה ואביזרים"},
+            {code: "GMA5042", name: "משקפיים כחולים Blue Light", description: "הגנה מול מסך, עבודה", price: "65", category: "אופנה ואביזרים"},
+            {code: "GMA5043", name: "תרמיל קומפקטי עמיד במים + USB", description: "עם USB, ספורט, נסיעות", price: "85", category: "אופנה ואביזרים"},
+            {code: "GMA5044", name: "משקפי שמש UV400", description: "מעוצבים, הגנה מהשמש", price: "75", category: "אופנה ואביזרים"},
+            {code: "GMA5045", name: "שעון יד מינימליסטי", description: "אלגנטי, קלאסי", price: "79", category: "אופנה ואביזרים"},
+            {code: "GMA5046", name: "סט תכשיטים מינימליסטי", description: "שרשרת + עגילים, נשים", price: "75", category: "אופנה ואביזרים"},
+            {code: "GMA5047", name: "תיק עור PU Crossbody", description: "נראה יקר, אלגנטי", price: "95", category: "אופנה ואביזרים"},
+            {code: "GMA5048", name: "שעון חכם אלגנטי מתכתי", description: "רצועת עור, משלב טכנולוגיה", price: "98", category: "אופנה ואביזרים"},
+            {code: "GMA5049", name: "ג'קט Softshell מתקפל", description: "פרקטי, חורף ישראלי", price: "99", category: "אופנה ואביזרים"},
+            {code: "GMA5050", name: "ארנק חכם עם GPS Tracker", description: "GPS למציאת ארנק אבוד", price: "98", category: "אופנה ואביזרים"}
+        ];
+
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = products.map((product, index) => {
+                const imagePath = `GMA/PIC/${product.code}.avif`;
+                return `
+                    <div class="product-card">
+                        <img src="${imagePath}" alt="${product.name}" class="product-image" 
+                             onerror="this.classList.add('empty-image'); this.innerHTML='לא זמין'; this.style.backgroundImage='none';">
+                        <div class="product-content">
+                            <div>
+                                <div class="product-code">${product.code}</div>
+                                <div class="product-category">${product.category}</div>
+                                <h2 class="product-name">${product.name}</h2>
+                                <p class="product-description">${product.description}</p>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-price">
+                                    ${product.price}<span class="currency">₪</span>
+                                </div>
+                                <button class="btn-request" onclick="requestProduct('${product.code}', '${product.name}')">שלח בקשה</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function requestProduct(code, name) {
+            const message = `בקשה לממלא:\nקוד מוצר: ${code}\nשם המוצר: ${name}`;
+            alert(message);
+            // You can replace this with an actual form or email submission
+        }
+
+        // Render products on page load
+        document.addEventListener('DOMContentLoaded', renderProducts);
+    </script>
+</body>
+</html>
