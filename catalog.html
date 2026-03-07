@@ -292,8 +292,9 @@
 
         function renderProducts() {
             const grid = document.getElementById('productsGrid');
+            const baseUrl = 'https://raw.githubusercontent.com/dafi-k/GMA-CATLOG-2026/main/GMA/PIC/';
             grid.innerHTML = products.map((product, index) => {
-                const imagePath = `GMA/PIC/${product.code}.avif`;
+                const imagePath = baseUrl + product.code + '.avif';
                 return `
                     <div class="product-card">
                         <img src="${imagePath}" alt="${product.name}" class="product-image" 
