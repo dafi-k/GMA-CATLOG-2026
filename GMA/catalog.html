@@ -1042,10 +1042,30 @@
     if (e.target === document.getElementById('contact-modal')) closeContactForm();
   }
 
-  function handleFormSubmit(e) {
+  const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbw4cUSKZJo4GvMH2FPYiVMKs1528_C-gEOSgqhHJVWzOxzBurPj2tsHlpoMaIo5UA/exec';
+
+  async function handleFormSubmit(e) {
     e.preventDefault();
     const form = e.target;
     if (!form.checkValidity()) { form.reportValidity(); return; }
+
+    const payload = {
+      firstName : document.getElementById('f-firstname').value.trim(),
+      lastName  : document.getElementById('f-lastname').value.trim(),
+      phone     : document.getElementById('f-phone').value.trim(),
+      email     : document.getElementById('f-email').value.trim(),
+      product   : document.getElementById('modal-product-name').textContent.trim(),
+      date      : new Date().toLocaleString('he-IL')
+    };
+
+    // שולח ל-Google Sheets ברקע — mode:no-cors עוקף CORS בלי לחסום את ה-UX
+    fetch(SHEETS_URL, {
+      method : 'POST',
+      mode   : 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body   : JSON.stringify(payload)
+    }).catch(() => {}); // שגיאות רשת לא חוסמות את המשתמש
+
     document.getElementById('contact-form').style.display = 'none';
     document.getElementById('form-success').style.display = 'block';
     setTimeout(closeContactForm, 3000);
