@@ -928,15 +928,9 @@
       <span class="modal-product-label">מוצר: <strong id="modal-product-name"></strong></span>
     </div>
     <form id="contact-form" onsubmit="handleFormSubmit(event)" novalidate>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="f-firstname">שם פרטי</label>
-          <input id="f-firstname" type="text" placeholder="ישראל" required>
-        </div>
-        <div class="form-group">
-          <label for="f-lastname">שם משפחה</label>
-          <input id="f-lastname" type="text" placeholder="ישראלי" required>
-        </div>
+      <div class="form-group">
+        <label for="f-fullname">שם מלא</label>
+        <input id="f-fullname" type="text" placeholder="ישראל ישראלי" required>
       </div>
       <div class="form-group">
         <label for="f-phone">מס׳ נייד</label>
@@ -951,7 +945,7 @@
     <div class="form-success" id="form-success">
       <div class="success-icon">✅</div>
       <h3>הבקשה נשלחה בהצלחה!</h3>
-      <p>נציג יצור איתך קשר בהקדם עם הצעת מחיר מותאמת.</p>
+      <p>נחזור אליך בהקדם!</p>
     </div>
   </div>
 </div>
@@ -1016,7 +1010,7 @@
     document.getElementById('contact-form').reset();
     document.getElementById('contact-modal').classList.add('open');
     document.body.style.overflow = 'hidden';
-    setTimeout(() => document.getElementById('f-firstname').focus(), 100);
+    setTimeout(() => document.getElementById('f-fullname').focus(), 100);
   }
 
   function closeContactForm() {
@@ -1028,27 +1022,25 @@
     if (e.target === document.getElementById('contact-modal')) closeContactForm();
   }
 
-  const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbw4cUSKZJo4GvMH2FPYiVMKs1528_C-gEOSgqhHJVWzOxzBurPj2tsHlpoMaIo5UA/exec';
+  const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbw2K8yd9w7T2DEznJoLrM09SmnNvRDkKSRkSYzLuJObI3jQKmjJX_BIluL07nIZJCo/exec';
 
   async function handleFormSubmit(e) {
     e.preventDefault();
     const form = e.target;
     if (!form.checkValidity()) { form.reportValidity(); return; }
 
-    const payload = {
-      firstName : document.getElementById('f-firstname').value.trim(),
-      lastName  : document.getElementById('f-lastname').value.trim(),
-      phone     : document.getElementById('f-phone').value.trim(),
-      email     : document.getElementById('f-email').value.trim(),
-      product   : document.getElementById('modal-product-name').textContent.trim(),
-      date      : new Date().toLocaleString('he-IL')
-    };
+    const params = new URLSearchParams({
+      fullName : document.getElementById('f-fullname').value.trim(),
+      phone    : document.getElementById('f-phone').value.trim(),
+      email    : document.getElementById('f-email').value.trim(),
+      product  : document.getElementById('modal-product-name').textContent.trim(),
+      date     : new Date().toLocaleString('he-IL')
+    });
 
     fetch(SHEETS_URL, {
       method : 'POST',
       mode   : 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body   : JSON.stringify(payload)
+      body   : params
     }).catch(() => {});
 
     document.getElementById('contact-form').style.display = 'none';
